@@ -48,19 +48,31 @@ const MainContent = () => {
   }, []);
 
   return (
-    <div className="bg-amber-200 w-[100%]">
+    <div className="bg-gray-100 w-[100%] min-h-[95vh] px-8">
       <section>
-        <div className="flex justify-between px-4">
-          {categories.map((category, index) => (
-            <button
-              onClick={() => setSelectedCategory(category.strCategory)}
-              key={index}
-            >
-              {category.strCategory}
-            </button>
-          ))}
+        <div className="flex flex-col md:flex-row justify-between items-center">
+          <input
+            placeholder="Search recipe..."
+            type="text"
+            className="px-4 rounded-full text-md bg-white h-[50px]"
+          />
+          <div className="flex justify-between gap-1 my-8">
+            {categories.map((category, index) => (
+              <button
+                className={`${
+                  selectedCategory === category.strCategory
+                    ? "bg-red-primary text-white border-red-primary"
+                    : "bg-gray-50 text-black border-black"
+                } px-4 py-2 border-[1px] rounded-lg text-lg cursor-pointer`}
+                onClick={() => setSelectedCategory(category.strCategory)}
+                key={index}
+              >
+                {category.strCategory}
+              </button>
+            ))}
+          </div>
         </div>
-        <div className="grid grid-cols-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-y-4">
           {recipes.map((recipe, index) => (
             <div key={index}>
               <MealCard imageURL={recipe.strMealThumb} name={recipe.strMeal} />
