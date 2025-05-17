@@ -75,7 +75,11 @@ const MainContent = () => {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-y-4">
           {recipes.map((recipe, index) => (
             <div key={index}>
-              <MealCard imageURL={recipe.strMealThumb} name={recipe.strMeal} />
+              <MealCard
+                id={recipe.idMeal}
+                imageURL={recipe.strMealThumb}
+                name={recipe.strMeal}
+              />
             </div>
           ))}
         </div>
