@@ -23,6 +23,7 @@ const MainContent = () => {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
+  // Setting beef as default selected category
   if (!selectedCategory) {
     setSelectedCategory("Beef");
   }
@@ -50,6 +51,13 @@ const MainContent = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  const handleDropdownSelect = (selectedVal: string) => {
+    if (selectedVal !== selectedCategory) {
+      setSelectedCategory(selectedVal);
+    }
+    setDropdownOpen(false);
+  };
+
   const getFilteredRecipes = () => {
     let filteredRecipes = recipes;
 
@@ -62,19 +70,13 @@ const MainContent = () => {
     return filteredRecipes;
   };
 
-  const handleDropdownSelect = (selectedVal: string) => {
-    if (selectedVal !== selectedCategory) {
-      setSelectedCategory(selectedVal);
-    }
-    setDropdownOpen(false);
-  };
-
   const filteredRecipes = getFilteredRecipes();
 
   return (
     <div className="bg-gray-200 w-[100%] min-h-[95vh] px-8">
       <section>
         <div className="flex flex-row justify-between items-center my-8">
+          {/* Search field */}
           <div className="relative bg-white rounded-full h-[50px]">
             <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
               <Search />
@@ -88,6 +90,8 @@ const MainContent = () => {
               className="w-full rounded-full text-md bg-white h-full focus:outline-none pl-10 pr-4"
             />
           </div>
+
+          {/* Category Selection for medium to mobile resolutions*/}
           <div className="relative block lg:hidden">
             <button
               className={`flex flex-row items-center w-[150px] bg-white px-4 py-2 border-[1px] rounded-lg text-lg cursor-pointer`}
@@ -108,6 +112,8 @@ const MainContent = () => {
               ))}
             </div>
           </div>
+
+          {/* Category selection for large resolutions and up */}
           <div className="hidden lg:flex justify-between gap-2">
             {categories.map((category, index) => (
               <button
@@ -124,6 +130,8 @@ const MainContent = () => {
             ))}
           </div>
         </div>
+
+        {/* Meals list */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-2 gap-y-4 mb-8">
           {filteredRecipes.map((recipe, index) => (
             <div key={index}>

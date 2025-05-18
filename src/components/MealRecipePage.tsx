@@ -1,6 +1,7 @@
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { ChevronLeft } from "lucide-react";
 
 interface Recipe {
   idMeal: string;
@@ -21,6 +22,7 @@ interface ingredientItem {
 
 const MealRecipePage = () => {
   let { id } = useParams();
+  let navigate = useNavigate();
   const [recipe, setRecipe] = useState<Recipe | undefined>(undefined);
   let [ingredients, setIngredients] = useState<ingredientItem[]>([]);
 
@@ -54,6 +56,16 @@ const MealRecipePage = () => {
 
   return (
     <div className="flex flex-col w-screen h-auto bg-gray-100">
+      {/* Back button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="fixed top-20 flex gap-2 z-40 items-center cursor-pointer bg-green-primary text-white text-2xl rounded-r-full px-4 py-2 font-bold"
+      >
+        <ChevronLeft />
+        Back
+      </button>
+
+      {/* Header Section */}
       <section className="w-screen h-[450px] md:h-[400px]">
         <div className="relative w-screen">
           <div
@@ -79,9 +91,12 @@ const MealRecipePage = () => {
           </div>
         </div>
       </section>
+
+      {/* Content Section */}
       <section>
         <div className="w-screen flex flex-col justify-center items-center my-4">
           <h1 className="text-2xl mb-2">Ingredients</h1>
+          {/* Ingredients */}
           <ul className="grid grid-cols-2 md:grid-cols-2 list-disc gap-x-8 gap-y-2 mb-4">
             {ingredients.map((ingredient, index) => (
               <li key={index} className="text-lg">
@@ -89,6 +104,7 @@ const MealRecipePage = () => {
               </li>
             ))}
           </ul>
+          {/* Instructions */}
           <h1 className="text-2xl mb-2">Instructions:</h1>
           <h2 className="md:px-10 w-[75%] text-lg">
             {recipe?.strInstructions}
