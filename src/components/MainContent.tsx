@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { ChevronDown, ChevronUp, Search } from "lucide-react";
 import MealCard from "./MealCard";
 
 interface Recipe {
@@ -19,6 +20,8 @@ const MainContent = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   if (!selectedCategory) {
     setSelectedCategory("Beef");
@@ -47,23 +50,72 @@ const MainContent = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  const getFilteredRecipes = () => {
+    let filteredRecipes = recipes;
+
+    if (searchQuery) {
+      filteredRecipes = filteredRecipes.filter((recipe) =>
+        recipe.strMeal.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    return filteredRecipes;
+  };
+
+  const handleDropdownSelect = (selectedVal: string) => {
+    if (selectedVal !== selectedCategory) {
+      setSelectedCategory(selectedVal);
+    }
+    setDropdownOpen(false);
+  };
+
+  const filteredRecipes = getFilteredRecipes();
+
   return (
-    <div className="bg-gray-100 w-[100%] min-h-[95vh] px-8">
+    <div className="bg-gray-200 w-[100%] min-h-[95vh] px-8">
       <section>
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <input
-            placeholder="Search recipe..."
-            type="text"
-            className="px-4 rounded-full text-md bg-white h-[50px]"
-          />
-          <div className="flex justify-between gap-1 my-8">
+        <div className="flex flex-row justify-between items-center my-8">
+          <div className="relative bg-white rounded-full h-[50px]">
+            <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+              <Search />
+            </div>
+            <input
+              placeholder={`Search ${
+                selectedCategory[0]?.toLowerCase() + selectedCategory.slice(1)
+              } recipes...`}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              type="text"
+              className="w-full rounded-full text-md bg-white h-full focus:outline-none pl-10 pr-4"
+            />
+          </div>
+          <div className="relative block lg:hidden">
+            <button
+              className={`flex flex-row items-center w-[150px] bg-white px-4 py-2 border-[1px] rounded-lg text-lg cursor-pointer`}
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+            >
+              {dropdownOpen ? <ChevronUp /> : <ChevronDown />}
+              {selectedCategory}
+            </button>
+            <div className={dropdownOpen ? "absolute right-0" : "hidden"}>
+              {categories.map((category, index) => (
+                <button
+                  className="w-[150px] bg-white p-2 hover:bg-gray-300 cursor-pointer"
+                  key={index}
+                  onClick={() => handleDropdownSelect(category.strCategory)}
+                >
+                  {category.strCategory}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="hidden lg:flex justify-between gap-2">
             {categories.map((category, index) => (
               <button
                 className={`${
                   selectedCategory === category.strCategory
-                    ? "bg-red-primary text-white border-red-primary"
-                    : "bg-gray-50 text-black border-black"
-                } px-4 py-2 border-[1px] rounded-lg text-lg cursor-pointer`}
+                    ? "bg-red-primary text-white"
+                    : "bg-white-primary text-black"
+                } p-2 rounded-full px-3 text-lg cursor-pointer`}
                 onClick={() => setSelectedCategory(category.strCategory)}
                 key={index}
               >
@@ -72,8 +124,8 @@ const MainContent = () => {
             ))}
           </div>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-y-4">
-          {recipes.map((recipe, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-2 gap-y-4 mb-8">
+          {filteredRecipes.map((recipe, index) => (
             <div key={index}>
               <MealCard
                 id={recipe.idMeal}

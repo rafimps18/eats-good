@@ -10,6 +10,8 @@ interface Recipe {
   strInstructions: string;
   strMealThumb: string;
   strTags: string;
+  strSource: string;
+  strYoutube: string;
 }
 
 interface ingredientItem {
@@ -46,22 +48,21 @@ const MealRecipePage = () => {
         }
 
         setIngredients(ingredientsAndAmounts);
-        console.log(ingredientsAndAmounts);
       })
       .catch((error) => console.log(error));
   }, [id]);
 
   return (
     <div className="flex flex-col w-screen h-auto bg-gray-100">
-      <section className="w-screen h-[400px]">
+      <section className="w-screen h-[450px] md:h-[400px]">
         <div className="relative w-screen">
           <div
-            className="z-10 absolute bg-cover w-screen h-[400px] flex flex-col justify-center items-center"
+            className="z-10 absolute bg-cover bg-fixed bg-center w-screen h-[450px] md:h-[400px] flex flex-col justify-center items-center"
             style={{ backgroundImage: `url(${recipe?.strMealThumb})` }}
           ></div>
-          <div className="z-20 absolute bg-black opacity-50 w-screen h-[400px] "></div>
+          <div className="z-20 absolute bg-black opacity-50 w-screen h-[450px] md:h-[400px] "></div>
           <div className="z-30 absolute">
-            <div className="flex flex-col md:flex-row w-screen justify-between items-center p-8">
+            <div className="flex flex-col md:flex-row w-screen justify-between items-center py-8">
               <div className="w-[50%] flex items-center justify-end pr-10">
                 <img
                   src={recipe?.strMealThumb}
@@ -73,9 +74,6 @@ const MealRecipePage = () => {
                 <h1 className="text-white font-bold text-[3rem]">
                   {recipe?.strMeal}
                 </h1>
-                <h2 className="text-white font-bold text-[2rem]">
-                  {recipe?.strCategory}
-                </h2>
               </div>
             </div>
           </div>
@@ -92,7 +90,15 @@ const MealRecipePage = () => {
             ))}
           </ul>
           <h1 className="text-2xl mb-2">Instructions:</h1>
-          <h2 className="px-10 w-[75%] text-lg">{recipe?.strInstructions}</h2>
+          <h2 className="md:px-10 w-[75%] text-lg">
+            {recipe?.strInstructions}
+          </h2>
+        </div>
+        <div className="w-screen flex flex-col md:flex-row justify-center items-center my-4 gap-1">
+          <p className="font-bold">Source: </p>
+          <a href={recipe?.strSource} className="hover:underline">
+            {recipe?.strSource}
+          </a>
         </div>
       </section>
     </div>

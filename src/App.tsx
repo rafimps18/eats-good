@@ -1,7 +1,8 @@
+import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
+import Navbar from "./components/Navbar";
 import MainContent from "./components/MainContent";
 import MealRecipePage from "./components/MealRecipePage";
-import Navbar from "./components/Navbar";
-import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
+import Footer from "./components/Footer";
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
           <Route path="/" element={<MainContent />} />
           <Route path="/recipe/:id" element={<MealRecipePage />} />
         </Routes>
+        <Footer />
       </div>
     </Router>
   );

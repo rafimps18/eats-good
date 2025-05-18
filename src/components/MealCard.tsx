@@ -9,15 +9,13 @@ interface MealCardPropTypes {
 const MealCard: React.FC<MealCardPropTypes> = ({ id, name, imageURL }) => {
   return (
     <Link to={`/recipe/${id}`}>
-      <div className="flex flex-col bg-white px-8 py-6 w-fit rounded-xl">
+      <div className="flex flex-row lg:flex-col bg-white-primary px-8 py-6 rounded-xl w-full gap-4 lg:gap-1 items-center lg:min-h-[400px] border-1 border-white hover:border-black">
         <img
-          className="lg:w-[250px] w-[10rem] h-auto mb-2 rounded-lg"
+          className="h-auto mb-2 rounded-lg w-[10rem] lg:w-[20rem]"
           src={imageURL}
           alt={name}
         />
-        <h1 className="text-xl md:text-lg">
-          {name.length < 20 ? name : `${name.slice(0, 20)}...`}
-        </h1>
+        <h1 className="text-xl md:text-lg text-wrap font-bold">{name}</h1>
       </div>
     </Link>
   );
