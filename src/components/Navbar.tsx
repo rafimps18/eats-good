@@ -4,7 +4,9 @@ const Navbar = () => {
     <div className="w-screen h-[8vh] bg-green-primary px-8 flex items-center">
       <Link to="/" className="flex gap-2 items-center cursor-pointer">
         <img src="/logo.svg" alt="logo" className="h-[8vh]" />
-        <h1 className="text-[3rem] font-bold text-white">Eat's Good!</h1>
+        <h1 className="text-[2rem] md:text-[3rem] font-bold text-white">
+          Eat's Good!
+        </h1>
       </Link>
     </div>
   );

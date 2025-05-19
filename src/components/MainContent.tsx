@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { ChevronDown, ChevronUp, Search } from "lucide-react";
 import MealCard from "./MealCard";
+import LoadingCard from "./LoadingCard";
 
 interface Recipe {
   idMeal: string;
@@ -22,6 +23,7 @@ const MainContent = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Setting beef as default selected category
   if (!selectedCategory) {
@@ -30,16 +32,18 @@ const MainContent = () => {
 
   useEffect(() => {
     let url = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${selectedCategory}`;
-
+    setLoading(true);
     axios
       .get(url)
       .then((res) => {
         setRecipes(res.data.meals);
       })
+      .finally(() => setLoading(false))
       .catch((err) => console.log(err));
   }, [selectedCategory]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const categoriesURL =
       "https://www.themealdb.com/api/json/v1/1/categories.php";
 
@@ -120,34 +124,47 @@ const MainContent = () => {
           </div>
 
           {/* Category selection for large resolutions and up */}
-          <div className="hidden lg:flex justify-between gap-2">
-            {categories.map((category, index) => (
-              <button
-                className={`${
-                  selectedCategory === category.strCategory
-                    ? "bg-red-primary text-white hover:bg-red-600 active:bg-red-700"
-                    : "bg-white-primary text-black hover:bg-blue-50 active:bg-blue-100"
-                } p-2 rounded-full px-3 text-lg cursor-pointer shadow-md`}
-                onClick={() => setSelectedCategory(category.strCategory)}
-                key={index}
-              >
-                {category.strCategory}
-              </button>
-            ))}
+          <div className="hidden lg:flex scrollbar-hide gap-2 overflow-x-auto">
+            {loading
+              ? Array(14)
+                  .fill(0)
+                  .map((_, i) => (
+                    <div
+                      key={i}
+                      className="bg-white-primary dark:bg-gray-400 animate-pulse rounded-full shadow-md w-[5rem] h-[2.5rem]"
+                    ></div>
+                  ))
+              : categories.map((category, index) => (
+                  <button
+                    className={`${
+                      selectedCategory === category.strCategory
+                        ? "bg-red-primary text-white hover:bg-red-600 active:bg-red-700"
+                        : "bg-white-primary text-black hover:bg-blue-50 active:bg-blue-100"
+                    } p-2 rounded-full px-3 text-lg cursor-pointer shadow-md`}
+                    onClick={() => setSelectedCategory(category.strCategory)}
+                    key={index}
+                  >
+                    {category.strCategory}
+                  </button>
+                ))}
           </div>
         </div>
 
         {/* Meals list */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-2 gap-y-4 mb-8">
-          {filteredRecipes.map((recipe, index) => (
-            <div key={index}>
-              <MealCard
-                id={recipe.idMeal}
-                imageURL={recipe.strMealThumb}
-                name={recipe.strMeal}
-              />
-            </div>
-          ))}
+          {loading
+            ? Array(5)
+                .fill(0)
+                .map((_, i) => <LoadingCard key={i} />)
+            : filteredRecipes.map((recipe, index) => (
+                <div key={index}>
+                  <MealCard
+                    id={recipe.idMeal}
+                    imageURL={recipe.strMealThumb}
+                    name={recipe.strMeal}
+                  />
+                </div>
+              ))}
         </div>
       </section>
     </div>

@@ -25,8 +25,12 @@ const MealRecipePage = () => {
   let navigate = useNavigate();
   const [recipe, setRecipe] = useState<Recipe | undefined>(undefined);
   let [ingredients, setIngredients] = useState<ingredientItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+    setLoading(true);
+
     let url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
 
     axios
@@ -50,8 +54,9 @@ const MealRecipePage = () => {
 
         setIngredients(ingredientsAndAmounts);
       })
+      .finally(() => setLoading(false))
       .catch((error) => console.log(error));
-  }, [id]);
+  }, []);
 
   return (
     <div className="flex flex-col w-screen h-auto bg-gray-100">
@@ -67,32 +72,48 @@ const MealRecipePage = () => {
       {/* Header Section */}
       <section className="w-screen h-[450px] md:h-[400px]">
         <div className="relative w-screen">
+          {loading ? (
+            <div className="z-10 absolute bg-cover bg-fixed bg-gray-300 dark:bg-gray-500 animate-pulse w-screen h-[450px] md:h-[400px] flex flex-col justify-center items-center"></div>
+          ) : (
+            <div
+              className="z-10 absolute bg-cover bg-fixed bg-center w-screen h-[450px] md:h-[400px] flex flex-col justify-center items-center"
+              style={{ backgroundImage: `url(${recipe?.strMealThumb})` }}
+            ></div>
+          )}
           <div
-            className="z-10 absolute bg-cover bg-fixed bg-center w-screen h-[450px] md:h-[400px] flex flex-col justify-center items-center"
-            style={{ backgroundImage: `url(${recipe?.strMealThumb})` }}
+            className={`${
+              loading ? "opacity-0" : " opacity-50"
+            } bg-black z-20 absolute w-screen h-[450px] md:h-[400px] `}
           ></div>
-          <div className="z-20 absolute bg-black opacity-50 w-screen h-[450px] md:h-[400px] "></div>
           <div className="z-30 absolute">
             <div className="flex flex-col md:flex-row w-screen justify-between items-center py-8">
-              <div className="w-[50%] flex items-center justify-end pr-10">
-                <img
-                  src={recipe?.strMealThumb}
-                  alt={recipe?.strMeal}
-                  className="w-[320px] rounded-lg shadow-lg"
-                />
+              <div className="md:w-[50%] flex items-center justify-center md:justify-end md:pr-10">
+                {loading ? (
+                  <div className="w-[320px] h-[320px] rounded-lg bg-gray-400 dark:bg-gray-600 animate-pulse"></div>
+                ) : (
+                  <img
+                    src={recipe?.strMealThumb}
+                    alt={recipe?.strMeal}
+                    className="w-[320px] rounded-lg shadow-lg"
+                  />
+                )}
               </div>
-              <div className="w-[50%] flex flex-col justify-baseline">
-                <h1
-                  className={`text-white font-bold ${
-                    recipe && recipe?.strMeal.length >= 50
-                      ? "text-[1.75rem]"
-                      : recipe && recipe?.strMeal.length >= 25
-                      ? "text-[2rem]"
-                      : "text-[3rem]"
-                  }`}
-                >
-                  {recipe?.strMeal}
-                </h1>
+              <div className="md:w-[50%] flex flex-col justify-baseline">
+                {loading ? (
+                  <div className="h-8 w-1/4 bg-gray-200 dark:bg-gray-400 rounded mt-2 animate-pulse"></div>
+                ) : (
+                  <h1
+                    className={`text-white text-center md:text-justify font-bold w-full md:w-[50%] ${
+                      recipe && recipe?.strMeal.length >= 50
+                        ? "text-[1.25rem] md:text-[1.75rem]"
+                        : recipe && recipe?.strMeal.length >= 25
+                        ? "text-[1.25rem] md:text-[2rem]"
+                        : "text-[1.75rem] md:text-[3rem]"
+                    }`}
+                  >
+                    {recipe?.strMeal}
+                  </h1>
+                )}
               </div>
             </div>
           </div>
