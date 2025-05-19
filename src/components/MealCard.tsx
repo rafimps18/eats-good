@@ -9,7 +9,7 @@ interface MealCardPropTypes {
 const MealCard: React.FC<MealCardPropTypes> = ({ id, name, imageURL }) => {
   return (
     <Link to={`/recipe/${id}`}>
-      <div className="flex flex-row lg:flex-col bg-white-primary px-8 py-6 rounded-xl w-full gap-4 lg:gap-1 items-center lg:min-h-[400px] border-1 border-white hover:border-black hover:scale-102">
+      <div className="flex flex-row lg:flex-col bg-white-primary px-8 py-6 rounded-xl w-full gap-4 lg:gap-1 items-center lg:min-h-[400px] border-none hover:bg-blue-50 active:bg-blue-100 hover:scale-102 shadow-md">
         <img
           className="h-auto mb-2 rounded-lg w-[10rem] lg:w-[20rem]"
           src={imageURL}

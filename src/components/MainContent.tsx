@@ -75,7 +75,7 @@ const MainContent = () => {
   return (
     <div className="bg-gray-200 w-[100%] min-h-[95vh] px-8">
       <section>
-        <div className="flex flex-row justify-between items-center my-8">
+        <div className="flex flex-row justify-between items-center my-8 gap-2 lg:gap-0">
           {/* Search field */}
           <div className="relative bg-white rounded-full h-[50px]">
             <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
@@ -87,23 +87,29 @@ const MainContent = () => {
               } recipes...`}
               onChange={(e) => setSearchQuery(e.target.value)}
               type="text"
-              className="w-full rounded-full text-md bg-white h-full focus:outline-none pl-10 pr-4"
+              className="w-full rounded-full text-md bg-white h-full focus:outline-none pl-10 pr-4 shadow-md"
             />
           </div>
 
           {/* Category Selection for medium to mobile resolutions*/}
           <div className="relative block lg:hidden">
             <button
-              className={`flex flex-row items-center w-[150px] bg-white px-4 py-2 border-[1px] rounded-lg text-lg cursor-pointer`}
+              className={`${
+                !dropdownOpen ? "rounded-lg" : "rounded-t-lg"
+              } flex flex-row items-center w-[150px] bg-white hover:bg-blue-50 active:bg-blue-100 px-4 py-3 border-none text-md cursor-pointer gap-2 shadow-md`}
               onClick={() => setDropdownOpen(!dropdownOpen)}
             >
               {dropdownOpen ? <ChevronUp /> : <ChevronDown />}
               {selectedCategory}
             </button>
-            <div className={dropdownOpen ? "absolute right-0" : "hidden"}>
+            <div
+              className={
+                dropdownOpen ? "absolute right-0 shadow-lg z-50" : "hidden"
+              }
+            >
               {categories.map((category, index) => (
                 <button
-                  className="w-[150px] bg-white p-2 hover:bg-gray-300 cursor-pointer"
+                  className={`w-[150px] bg-white p-2 hover:bg-blue-50 active:bg-blue-100 cursor-pointer`}
                   key={index}
                   onClick={() => handleDropdownSelect(category.strCategory)}
                 >
@@ -119,9 +125,9 @@ const MainContent = () => {
               <button
                 className={`${
                   selectedCategory === category.strCategory
-                    ? "bg-red-primary text-white"
-                    : "bg-white-primary text-black"
-                } p-2 rounded-full px-3 text-lg cursor-pointer`}
+                    ? "bg-red-primary text-white hover:bg-red-600 active:bg-red-700"
+                    : "bg-white-primary text-black hover:bg-blue-50 active:bg-blue-100"
+                } p-2 rounded-full px-3 text-lg cursor-pointer shadow-md`}
                 onClick={() => setSelectedCategory(category.strCategory)}
                 key={index}
               >

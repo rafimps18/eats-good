@@ -34,7 +34,6 @@ const MealRecipePage = () => {
       .then((res) => {
         let data = res.data.meals[0];
         setRecipe(data);
-        console.log(data);
 
         const ingredientsAndAmounts: ingredientItem[] = [];
 
@@ -59,7 +58,7 @@ const MealRecipePage = () => {
       {/* Back button */}
       <button
         onClick={() => navigate(-1)}
-        className="fixed top-20 flex gap-2 z-40 items-center cursor-pointer bg-green-primary text-white text-2xl rounded-r-full px-4 py-2 font-bold"
+        className="fixed top-20 flex gap-2 z-40 items-center cursor-pointer bg-green-primary hover:bg-green-700 active:bg-green-800 text-white text-2xl rounded-r-full px-4 py-2 font-bold shadow-lg"
       >
         <ChevronLeft />
         Back
@@ -79,11 +78,19 @@ const MealRecipePage = () => {
                 <img
                   src={recipe?.strMealThumb}
                   alt={recipe?.strMeal}
-                  className="w-[320px] rounded-lg"
+                  className="w-[320px] rounded-lg shadow-lg"
                 />
               </div>
               <div className="w-[50%] flex flex-col justify-baseline">
-                <h1 className="text-white font-bold text-[3rem]">
+                <h1
+                  className={`text-white font-bold ${
+                    recipe && recipe?.strMeal.length >= 50
+                      ? "text-[1.75rem]"
+                      : recipe && recipe?.strMeal.length >= 25
+                      ? "text-[2rem]"
+                      : "text-[3rem]"
+                  }`}
+                >
                   {recipe?.strMeal}
                 </h1>
               </div>
@@ -97,7 +104,7 @@ const MealRecipePage = () => {
         <div className="w-screen flex flex-col justify-center items-center my-4">
           <h1 className="text-2xl mb-2">Ingredients</h1>
           {/* Ingredients */}
-          <ul className="grid grid-cols-2 md:grid-cols-2 list-disc gap-x-8 gap-y-2 mb-4">
+          <ul className="grid grid-cols-1 md:grid-cols-2 list-disc gap-x-8 gap-y-2 mb-8">
             {ingredients.map((ingredient, index) => (
               <li key={index} className="text-lg">
                 {ingredient.amount} {ingredient.name}
@@ -110,12 +117,16 @@ const MealRecipePage = () => {
             {recipe?.strInstructions}
           </h2>
         </div>
-        <div className="w-screen flex flex-col md:flex-row justify-center items-center my-4 gap-1">
-          <p className="font-bold">Source: </p>
-          <a href={recipe?.strSource} className="hover:underline">
-            {recipe?.strSource}
-          </a>
-        </div>
+        {recipe?.strSource !== "" ? (
+          <div className="w-screen flex flex-col md:flex-row justify-center items-center my-4 gap-1 px-8">
+            <p className="font-bold">Source: </p>
+            <a href={recipe?.strSource} className="hover:underline">
+              {recipe?.strSource}
+            </a>
+          </div>
+        ) : (
+          <div></div>
+        )}
       </section>
     </div>
   );
