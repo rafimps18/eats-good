@@ -132,7 +132,7 @@ const MealRecipePage = () => {
                   .map((_, i) => (
                     <div
                       key={i}
-                      className="h-5 w-40 bg-gray-300 dark:bg-gray-400 rounded animate-pulse"
+                      className="h-6 w-40 bg-gray-300 dark:bg-gray-400 rounded animate-pulse"
                     ></div>
                   ))
               : ingredients.map((ingredient, index) => (
@@ -149,7 +149,7 @@ const MealRecipePage = () => {
               .map((_, i) => (
                 <div
                   key={i}
-                  className="h-5 w-[70vw] lg:w-[60vw] bg-gray-300 dark:bg-gray-400 rounded animate-pulse mb-2"
+                  className="h-6 w-[70vw] lg:w-[60vw] bg-gray-300 dark:bg-gray-400 rounded animate-pulse mb-2"
                 ></div>
               ))
           ) : (

@@ -23,7 +23,8 @@ const MainContent = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [recipesLoading, setRecipesLoading] = useState<boolean>(false);
+  const [categoriesLoading, setCategoriesLoading] = useState<boolean>(false);
 
   // Setting beef as default selected category
   if (!selectedCategory) {
@@ -32,18 +33,19 @@ const MainContent = () => {
 
   useEffect(() => {
     let url = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${selectedCategory}`;
-    setLoading(true);
+    setRecipesLoading(true);
     axios
       .get(url)
       .then((res) => {
         setRecipes(res.data.meals);
       })
-      .finally(() => setLoading(false))
+      .finally(() => setRecipesLoading(false))
       .catch((err) => console.log(err));
   }, [selectedCategory]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    setCategoriesLoading(true);
     const categoriesURL =
       "https://www.themealdb.com/api/json/v1/1/categories.php";
 
@@ -52,6 +54,7 @@ const MainContent = () => {
       .then((res) => {
         setCategories(res.data.categories);
       })
+      .finally(() => setCategoriesLoading(false))
       .catch((err) => console.log(err));
   }, []);
 
@@ -126,7 +129,7 @@ const MainContent = () => {
           {/* Category selection for large resolutions and up */}
           <div className="hidden lg:flex justify-center w-screen">
             <div className="flex overflow-x-auto gap-2 px-10 pb-2">
-              {loading
+              {categoriesLoading
                 ? Array(14)
                     .fill(0)
                     .map((_, i) => (
@@ -154,7 +157,7 @@ const MainContent = () => {
 
         {/* Meals list */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-2 gap-y-4 mb-8">
-          {loading
+          {recipesLoading
             ? Array(5)
                 .fill(0)
                 .map((_, i) => <LoadingCard key={i} />)
