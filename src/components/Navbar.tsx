@@ -3,7 +3,7 @@ const Navbar = () => {
   return (
     <div className="w-screen h-[8vh] bg-green-primary px-8 flex items-center">
       <Link to="/" className="flex gap-2 items-center cursor-pointer">
-        <img src="/logo.svg" alt="logo" className="h-[8vh]" />
+        <img src="/logo.svg" alt="logo" className="h-[5vh] md:h-[8vh]" />
         <h1 className="text-[2rem] md:text-[3rem] font-bold text-white">
           Eat's Good!
         </h1>

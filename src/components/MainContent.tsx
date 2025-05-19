@@ -79,7 +79,7 @@ const MainContent = () => {
   return (
     <div className="bg-gray-200 w-[100%] min-h-[95vh] px-8">
       <section>
-        <div className="flex flex-row justify-between items-center my-8 gap-2 lg:gap-0">
+        <div className="flex flex-col justify-center items-center mt-8 mb-6  gap-4">
           {/* Search field */}
           <div className="relative bg-white rounded-full h-[50px]">
             <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
@@ -124,29 +124,31 @@ const MainContent = () => {
           </div>
 
           {/* Category selection for large resolutions and up */}
-          <div className="hidden lg:flex scrollbar-hide gap-2 overflow-x-auto">
-            {loading
-              ? Array(14)
-                  .fill(0)
-                  .map((_, i) => (
-                    <div
-                      key={i}
-                      className="bg-white-primary dark:bg-gray-400 animate-pulse rounded-full shadow-md w-[5rem] h-[2.5rem]"
-                    ></div>
-                  ))
-              : categories.map((category, index) => (
-                  <button
-                    className={`${
-                      selectedCategory === category.strCategory
-                        ? "bg-red-primary text-white hover:bg-red-600 active:bg-red-700"
-                        : "bg-white-primary text-black hover:bg-blue-50 active:bg-blue-100"
-                    } p-2 rounded-full px-3 text-lg cursor-pointer shadow-md`}
-                    onClick={() => setSelectedCategory(category.strCategory)}
-                    key={index}
-                  >
-                    {category.strCategory}
-                  </button>
-                ))}
+          <div className="hidden lg:flex justify-center w-screen">
+            <div className="flex overflow-x-auto gap-2 px-10 pb-2">
+              {loading
+                ? Array(14)
+                    .fill(0)
+                    .map((_, i) => (
+                      <div
+                        key={i}
+                        className="bg-white-primary dark:bg-gray-400 animate-pulse rounded-full shadow-md w-[5rem] h-[2.5rem]"
+                      ></div>
+                    ))
+                : categories.map((category, index) => (
+                    <button
+                      className={`${
+                        selectedCategory === category.strCategory
+                          ? "bg-red-primary text-white hover:bg-red-600 active:bg-red-700"
+                          : "bg-white-primary text-black hover:bg-blue-50 active:bg-blue-100"
+                      } p-2 rounded-full px-3 text-lg cursor-pointer shadow-md`}
+                      onClick={() => setSelectedCategory(category.strCategory)}
+                      key={index}
+                    >
+                      {category.strCategory}
+                    </button>
+                  ))}
+            </div>
           </div>
         </div>
 

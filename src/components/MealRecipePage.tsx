@@ -126,17 +126,37 @@ const MealRecipePage = () => {
           <h1 className="text-2xl mb-2">Ingredients</h1>
           {/* Ingredients */}
           <ul className="grid grid-cols-1 md:grid-cols-2 list-disc gap-x-8 gap-y-2 mb-8">
-            {ingredients.map((ingredient, index) => (
-              <li key={index} className="text-lg">
-                {ingredient.amount} {ingredient.name}
-              </li>
-            ))}
+            {loading
+              ? Array(10)
+                  .fill(0)
+                  .map((_, i) => (
+                    <div
+                      key={i}
+                      className="h-5 w-40 bg-gray-300 dark:bg-gray-400 rounded animate-pulse"
+                    ></div>
+                  ))
+              : ingredients.map((ingredient, index) => (
+                  <li key={index} className="text-lg">
+                    {ingredient.amount} {ingredient.name}
+                  </li>
+                ))}
           </ul>
           {/* Instructions */}
           <h1 className="text-2xl mb-2">Instructions:</h1>
-          <h2 className="md:px-10 w-[75%] text-lg">
-            {recipe?.strInstructions}
-          </h2>
+          {loading ? (
+            Array(6)
+              .fill(0)
+              .map((_, i) => (
+                <div
+                  key={i}
+                  className="h-5 w-[70vw] lg:w-[60vw] bg-gray-300 dark:bg-gray-400 rounded animate-pulse mb-2"
+                ></div>
+              ))
+          ) : (
+            <h2 className="md:px-10 w-[75%] text-lg">
+              {recipe?.strInstructions}
+            </h2>
+          )}
         </div>
         {recipe?.strSource !== "" ? (
           <div className="w-screen flex flex-col md:flex-row justify-center items-center my-4 gap-1 px-8">
