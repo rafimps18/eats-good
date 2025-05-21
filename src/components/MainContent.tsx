@@ -10,21 +10,29 @@ interface Recipe {
   strMealThumb: string;
 }
 
-interface Category {
-  idCategory: string;
-  strCategory: string;
-  strCategoryDescription: string;
-  strCategoryThumb: string;
-}
-
 const MainContent = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [recipesLoading, setRecipesLoading] = useState<boolean>(false);
-  const [categoriesLoading, setCategoriesLoading] = useState<boolean>(false);
+
+  const categoriesList = [
+    "Beef",
+    "Chicken",
+    "Dessert",
+    "Lamb",
+    "Miscellaneous",
+    "Pasta",
+    "Pork",
+    "Seafood",
+    "Side",
+    "Starter",
+    "Vegan",
+    "Vegetarian",
+    "Breakfast",
+    "Goat",
+  ];
 
   // Setting beef as default selected category
   if (!selectedCategory) {
@@ -45,17 +53,6 @@ const MainContent = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    setCategoriesLoading(true);
-    const categoriesURL =
-      "https://www.themealdb.com/api/json/v1/1/categories.php";
-
-    axios
-      .get(categoriesURL)
-      .then((res) => {
-        setCategories(res.data.categories);
-      })
-      .finally(() => setCategoriesLoading(false))
-      .catch((err) => console.log(err));
   }, []);
 
   const handleDropdownSelect = (selectedVal: string) => {
@@ -114,13 +111,13 @@ const MainContent = () => {
                 dropdownOpen ? "absolute right-0 shadow-lg z-50" : "hidden"
               }
             >
-              {categories.map((category, index) => (
+              {categoriesList.map((category, index) => (
                 <button
                   className={`w-[150px] bg-white p-2 hover:bg-blue-50 active:bg-blue-100 cursor-pointer`}
                   key={index}
-                  onClick={() => handleDropdownSelect(category.strCategory)}
+                  onClick={() => handleDropdownSelect(category)}
                 >
-                  {category.strCategory}
+                  {category}
                 </button>
               ))}
             </div>
@@ -129,28 +126,19 @@ const MainContent = () => {
           {/* Category selection for large resolutions and up */}
           <div className="hidden lg:flex justify-center w-screen">
             <div className="flex overflow-x-auto gap-2 px-10 pb-2">
-              {categoriesLoading
-                ? Array(14)
-                    .fill(0)
-                    .map((_, i) => (
-                      <div
-                        key={i}
-                        className="bg-white-primary dark:bg-gray-400 animate-pulse rounded-full shadow-md w-[5rem] h-[2.5rem]"
-                      ></div>
-                    ))
-                : categories.map((category, index) => (
-                    <button
-                      className={`${
-                        selectedCategory === category.strCategory
-                          ? "bg-red-primary text-white hover:bg-red-600 active:bg-red-700"
-                          : "bg-white-primary text-black hover:bg-blue-50 active:bg-blue-100"
-                      } p-2 rounded-full px-3 text-lg cursor-pointer shadow-md`}
-                      onClick={() => setSelectedCategory(category.strCategory)}
-                      key={index}
-                    >
-                      {category.strCategory}
-                    </button>
-                  ))}
+              {categoriesList.map((category, index) => (
+                <button
+                  className={`${
+                    selectedCategory === category
+                      ? "bg-red-primary text-white hover:bg-red-600 active:bg-red-700"
+                      : "bg-white-primary text-black hover:bg-blue-50 active:bg-blue-100"
+                  } p-2 rounded-full px-3 text-lg cursor-pointer shadow-md`}
+                  onClick={() => setSelectedCategory(category)}
+                  key={index}
+                >
+                  {category}
+                </button>
+              ))}
             </div>
           </div>
         </div>
