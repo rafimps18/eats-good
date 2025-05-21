@@ -1,7 +1,9 @@
 import { Send, X } from "lucide-react";
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { initialPrompt } from "../initialPrompt";
 
 interface ChatMessage {
+  hiddenInChat: boolean;
   role: string;
   text: string;
 }
@@ -14,7 +16,8 @@ interface ChatHistory {
 const Chatbot = () => {
   const [chatWindowOpen, setChatWindowOpen] = useState<boolean>(false);
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
-    { role: "model", text: "Hello there!" },
+    { hiddenInChat: false, role: "model", text: "Hello! How can I help you?" },
+    { hiddenInChat: true, role: "model", text: initialPrompt },
   ]);
   const inputRef = useRef<HTMLInputElement>(null);
   const chatBodyRef = useRef<HTMLDivElement>(null);
@@ -28,17 +31,21 @@ const Chatbot = () => {
 
     setChatHistory((history) => [
       ...history,
-      { role: "user", text: userMessage },
+      { hiddenInChat: false, role: "user", text: userMessage },
     ]);
 
     setTimeout(() => {
       setChatHistory((history) => [
         ...history,
-        { role: "model", text: "Thinking..." },
+        { hiddenInChat: false, role: "model", text: "Thinking..." },
       ]);
       generateBotResponse([
         ...chatHistory,
-        { role: "user", text: userMessage },
+        {
+          hiddenInChat: false,
+          role: "user",
+          text: `Using the details provided above, please address this query: ${userMessage}`,
+        },
       ]);
     }, 600);
   };
@@ -46,7 +53,7 @@ const Chatbot = () => {
   const updateHistory = (text: string) => {
     setChatHistory((previousHistory) => [
       ...previousHistory.filter((msg) => msg.text !== "Thinking..."),
-      { role: "model", text: text },
+      { hiddenInChat: false, role: "model", text: text },
     ]);
   };
 
@@ -69,7 +76,6 @@ const Chatbot = () => {
       const data = await response.json();
       if (!response.ok)
         throw new Error(data.error.message || "Something went wrong");
-      console.log(data);
       const apiResponseText = data.candidates[0].content.parts[0].text
         .replace(/\*\*(.*?)\*\*/g, "$1")
         .trim();
@@ -110,26 +116,28 @@ const Chatbot = () => {
               <X color="white" className="mx-auto" />
             </button>
           </div>
-          <div className="bg-white h-[50vh] md:w-[45vw] lg:w-[20vw] rounded-b-lg shadow-md">
+          <div className="bg-white h-[50vh] md:w-[45vw] lg:w-[20vw] rounded-bl-lg rounded-br-sm shadow-md">
             <div
               ref={chatBodyRef}
-              className="h-[85%] w-[100%] p-4 overflow-y-auto overflow-x-hidden scroll"
+              className="h-[85%] w-[100%] p-4 overflow-y-auto overflow-x-hidden scroll mb-3"
             >
               {chatHistory.map((message, index) => (
                 <div
                   key={index}
                   className={`${
                     message.role === "user" ? "justify-end" : "justify-baseline"
-                  } w-full flex mb-2`}
+                  } ${
+                    message.hiddenInChat === true ? "hidden" : "flex"
+                  } w-full mb-2`}
                 >
                   <div
                     className={`${
                       message.role === "user"
-                        ? "bg-gray-200 text-end ml-4"
-                        : "bg-green-primary text-white text-justify mr-6"
-                    } p-2 rounded-xl w-fit mb-1`}
+                        ? "bg-gray-200 text-end ml-4 rounded-br-sm"
+                        : "bg-green-primary text-white text-justify mr-6 rounded-bl-sm"
+                    } px-4 py-2 w-fit mb-1 rounded-2xl`}
                   >
-                    <p>{message.text}</p>
+                    <p className="text-justify">{message.text}</p>
                   </div>
                 </div>
               ))}
