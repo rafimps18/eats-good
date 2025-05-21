@@ -1,4 +1,4 @@
-import { Send, X } from "lucide-react";
+import { ChevronDown, Send } from "lucide-react";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { initialPrompt } from "../initialPrompt";
 
@@ -93,14 +93,14 @@ const Chatbot = () => {
   }, [chatHistory]);
 
   return (
-    <div className="fixed z-50 right-5 md:right-10 bottom-10">
+    <div className="fixed z-50 right-5 md:right-10 bottom-10 ml-5">
       <div className="flex flex-col justify-end items-end">
         <div
           className={`${
             !chatWindowOpen ? "hidden" : "flex flex-col"
           } justify-center items-center mb-2`}
         >
-          <div className="bg-green-primary h-[4rem] w-[100%] md:w-[45vw] lg:w-[20vw] rounded-t-lg flex justify-between items-center px-4">
+          <div className="bg-green-primary h-[4rem] w-[100%] md:w-[50vw] lg:w-[375px] rounded-t-lg flex justify-between items-center px-4">
             <div className="flex justify-between items-center gap-2">
               <img
                 src="./chatbot.svg"
@@ -113,13 +113,14 @@ const Chatbot = () => {
               onClick={() => setChatWindowOpen(!chatWindowOpen)}
               className="w-[30px] h-[30px] rounded-full bg-green-primary hover:bg-green-700 cursor-pointer"
             >
-              <X color="white" className="mx-auto" />
+              <ChevronDown color="white" className="mx-auto mt-0.5" />
             </button>
           </div>
-          <div className="bg-white h-[50vh] md:w-[45vw] lg:w-[20vw] rounded-bl-lg rounded-br-sm shadow-md">
+          {/* Chat messages window */}
+          <div className="bg-white h-[70vh] md:h-[60vh] md:w-[50vw] lg:w-[375px] rounded-bl-lg rounded-br-sm shadow-md">
             <div
               ref={chatBodyRef}
-              className="h-[85%] w-[100%] p-4 overflow-y-auto overflow-x-hidden scroll mb-3"
+              className="h-[89%] w-[100%] py-4 pl-4 pr-2 overflow-y-auto overflow-x-hidden scroll"
             >
               {chatHistory.map((message, index) => (
                 <div
@@ -134,15 +135,20 @@ const Chatbot = () => {
                     className={`${
                       message.role === "user"
                         ? "bg-gray-200 text-end ml-4 rounded-br-sm"
-                        : "bg-green-primary text-white text-justify mr-6 rounded-bl-sm"
-                    } px-4 py-2 w-fit mb-1 rounded-2xl`}
+                        : `${
+                            message.text === "Thinking..."
+                              ? "animate-pulse"
+                              : ""
+                          } bg-green-primary  text-white text-justify mr-6 rounded-bl-sm`
+                    } px-4 py-2 w-fit mb-1 rounded-2xl text-sm shadow-md`}
                   >
                     <p className="text-justify">{message.text}</p>
                   </div>
                 </div>
               ))}
             </div>
-            <form className="h-fit w-[100%] flex items-center justify-between px-3 gap-2">
+            {/* Message input field and send button */}
+            <form className="h-[11%] w-[100%] flex items-center justify-between px-3 gap-2">
               <input
                 ref={inputRef}
                 type="text"
@@ -154,7 +160,7 @@ const Chatbot = () => {
                 onClick={(e) => handleFormSubmit(e)}
                 className="bg-green-primary hover:bg-green-700 p-2 rounded-full flex items-center justify-center cursor-pointer"
               >
-                <Send color="white" />
+                <Send color="white" className="mt-0.5 mx-auto" />
               </button>
             </form>
           </div>
@@ -164,7 +170,11 @@ const Chatbot = () => {
           className="bg-green-primary w-[50px] h-[50px] md:w-[80px] md:h-[80px] rounded-full hover:bg-green-700 cursor-pointer shadow-md"
         >
           <div className="flex justify-center items-center md:w-[100%] md:h-[100%]">
-            <img src="./chatbot.svg" alt="chatbot icon" className="w-[30px]" />
+            <img
+              src="./chatbot.svg"
+              alt="chatbot icon"
+              className="w-[20px] md:w-[30px]"
+            />
           </div>
         </button>
       </div>
