@@ -1,6 +1,12 @@
 import { ChevronDown, Send } from "lucide-react";
-import { useEffect, useRef, useState, type FormEvent } from "react";
-import { initialPrompt } from "../initialPrompt";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  type FormEvent,
+} from "react";
+import { initialPrompt } from "../constants";
 
 interface ChatMessage {
   hiddenInChat: boolean;
@@ -22,33 +28,36 @@ const Chatbot = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const chatBodyRef = useRef<HTMLDivElement>(null);
 
-  const handleFormSubmit = (e: FormEvent) => {
-    e.preventDefault();
+  const handleFormSubmit = useCallback(
+    (e: FormEvent) => {
+      e.preventDefault();
 
-    const userMessage = inputRef.current!.value.trim();
-    if (!userMessage) return;
-    inputRef.current!.value = "";
+      const userMessage = inputRef.current?.value.trim() || "";
+      if (!userMessage) return;
+      if (inputRef.current) inputRef.current.value = "";
 
-    setChatHistory((history) => [
-      ...history,
-      { hiddenInChat: false, role: "user", text: userMessage },
-    ]);
-
-    setTimeout(() => {
       setChatHistory((history) => [
         ...history,
-        { hiddenInChat: false, role: "model", text: "Thinking..." },
+        { hiddenInChat: false, role: "user", text: userMessage },
       ]);
-      generateBotResponse([
-        ...chatHistory,
-        {
-          hiddenInChat: false,
-          role: "user",
-          text: `Using the details provided above, please address this query: ${userMessage}`,
-        },
-      ]);
-    }, 600);
-  };
+
+      setTimeout(() => {
+        setChatHistory((history) => [
+          ...history,
+          { hiddenInChat: false, role: "model", text: "Thinking..." },
+        ]);
+        generateBotResponse([
+          ...chatHistory,
+          {
+            hiddenInChat: false,
+            role: "user",
+            text: `Using the details provided above, please address this query: ${userMessage}`,
+          },
+        ]);
+      }, 600);
+    },
+    [chatHistory]
+  );
 
   const updateHistory = (text: string) => {
     setChatHistory((previousHistory) => [
@@ -76,17 +85,24 @@ const Chatbot = () => {
       const data = await response.json();
       if (!response.ok)
         throw new Error(data.error.message || "Something went wrong");
-      const apiResponseText = data.candidates[0].content.parts[0].text
+      const extractedResponse = data.candidates[0].content.parts[0].text;
+      if (!response) {
+        throw new Error("Invalid API response format");
+      }
+      const apiResponseText = extractedResponse
         .replace(/\*\*(.*?)\*\*/g, "$1")
         .trim();
       updateHistory(apiResponseText);
     } catch (error) {
-      console.log(error);
+      console.error("Chat error: ", error);
+      updateHistory(
+        "Sorry, I'm having trouble responding right now. Please try again."
+      );
     }
   };
 
   useEffect(() => {
-    chatBodyRef.current!.scrollTo({
+    chatBodyRef.current?.scrollTo({
       top: chatBodyRef.current?.scrollHeight,
       behavior: "smooth",
     });
@@ -111,7 +127,7 @@ const Chatbot = () => {
             </div>
             <button
               onClick={() => setChatWindowOpen(!chatWindowOpen)}
-              className="w-[30px] h-[30px] rounded-full bg-green-primary hover:bg-green-700 cursor-pointer"
+              className="w-[30px] h-[30px] rounded-full bg-green-primary hover:bg-green-700 active:bg-green-800 cursor-pointer"
             >
               <ChevronDown color="white" className="mx-auto mt-0.5" />
             </button>
@@ -155,10 +171,12 @@ const Chatbot = () => {
                 name="message-input"
                 id="message-input"
                 className="border-[1px] border-gray-400 rounded-full px-4 py-2 w-[100%]"
+                autoComplete="off"
+                maxLength={200}
               />
               <button
                 onClick={(e) => handleFormSubmit(e)}
-                className="bg-green-primary hover:bg-green-700 p-2 rounded-full flex items-center justify-center cursor-pointer"
+                className="bg-green-primary hover:bg-green-700 active:bg-green-800 p-2 rounded-full flex items-center justify-center cursor-pointer"
               >
                 <Send color="white" className="mt-0.5 mx-auto" />
               </button>
@@ -167,7 +185,7 @@ const Chatbot = () => {
         </div>
         <button
           onClick={() => setChatWindowOpen(!chatWindowOpen)}
-          className="bg-green-primary w-[50px] h-[50px] md:w-[80px] md:h-[80px] rounded-full hover:bg-green-700 cursor-pointer shadow-md"
+          className="bg-green-primary w-[50px] h-[50px] md:w-[80px] md:h-[80px] rounded-full hover:bg-green-700 active:bg-green-800 cursor-pointer shadow-md"
         >
           <div className="flex justify-center items-center md:w-[100%] md:h-[100%]">
             <img

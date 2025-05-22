@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import { ChevronDown, ChevronUp, Search } from "lucide-react";
 import MealCard from "./MealCard";
 import LoadingCard from "./LoadingCard";
+import { categoriesList } from "../constants";
 
 interface Recipe {
   idMeal: string;
@@ -12,32 +13,10 @@ interface Recipe {
 
 const MainContent = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("Beef");
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [recipesLoading, setRecipesLoading] = useState<boolean>(false);
-
-  const categoriesList = [
-    "Beef",
-    "Chicken",
-    "Dessert",
-    "Lamb",
-    "Miscellaneous",
-    "Pasta",
-    "Pork",
-    "Seafood",
-    "Side",
-    "Starter",
-    "Vegan",
-    "Vegetarian",
-    "Breakfast",
-    "Goat",
-  ];
-
-  // Setting beef as default selected category
-  if (!selectedCategory) {
-    setSelectedCategory("Beef");
-  }
 
   useEffect(() => {
     let url = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${selectedCategory}`;
@@ -45,10 +24,10 @@ const MainContent = () => {
     axios
       .get(url)
       .then((res) => {
-        setRecipes(res.data.meals);
+        setRecipes(res.data?.meals || []);
       })
-      .finally(() => setRecipesLoading(false))
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setRecipesLoading(false));
   }, [selectedCategory]);
 
   useEffect(() => {
@@ -62,19 +41,12 @@ const MainContent = () => {
     setDropdownOpen(false);
   };
 
-  const getFilteredRecipes = () => {
-    let filteredRecipes = recipes;
-
-    if (searchQuery) {
-      filteredRecipes = filteredRecipes.filter((recipe) =>
-        recipe.strMeal.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    return filteredRecipes;
-  };
-
-  const filteredRecipes = getFilteredRecipes();
+  const filteredRecipes = useMemo(() => {
+    if (!searchQuery) return recipes;
+    return recipes.filter((recipe) =>
+      recipe.strMeal.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [recipes, searchQuery]);
 
   return (
     <div className="bg-gray-200 w-[100%] min-h-[95vh] px-8">
@@ -108,7 +80,7 @@ const MainContent = () => {
             </button>
             <div
               className={
-                dropdownOpen ? "absolute right-0 shadow-lg z-50" : "hidden"
+                dropdownOpen ? "absolute right-0 shadow-lg z-40" : "hidden"
               }
             >
               {categoriesList.map((category, index) => (

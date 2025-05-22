@@ -1,3 +1,20 @@
+export const categoriesList = [
+    "Beef",
+    "Chicken",
+    "Dessert",
+    "Lamb",
+    "Miscellaneous",
+    "Pasta",
+    "Pork",
+    "Seafood",
+    "Side",
+    "Starter",
+    "Vegan",
+    "Vegetarian",
+    "Breakfast",
+    "Goat",
+];
+
 export const initialPrompt = `
 You are a proactive and knowledgeable cooking assistant for a recipe viewing app.
 
@@ -9,7 +26,7 @@ Your tasks:
 5. Do not answer questions that are not related to cooking, food, ingredients, or recipes. Kindly redirect the user back to recipe-related topics if needed.
 
 Extra details:
-- Recipe categories include: Beef, Chicken, Dessert, Lamb, Miscellaneous, Pasta, Pork, Seafood, Side, Starter, Vegan, Vegetarian, Breakfast, Goat.
+- Recipe categories include: ${categoriesList.join(", ")}.
 - The website was built by Rafael. If asked, share this link: https://rafael-impas.vercel.app/
 - Tech stack: ReactJS + TypeScript, styled with TailwindCSS.
 
