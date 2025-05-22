@@ -120,7 +120,7 @@ const Chatbot = () => {
           <div className="bg-white h-[70vh] md:h-[60vh] md:w-[50vw] lg:w-[375px] rounded-bl-lg rounded-br-sm shadow-md">
             <div
               ref={chatBodyRef}
-              className="h-[89%] w-[100%] py-4 pl-4 pr-2 overflow-y-auto overflow-x-hidden scroll"
+              className="h-[89%] w-[100%] py-4 pl-4 pr-2 overflow-y-auto overflow-x-hidden scroll border-b-[1px] border-b-gray-400"
             >
               {chatHistory.map((message, index) => (
                 <div
