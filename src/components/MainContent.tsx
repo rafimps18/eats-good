@@ -104,7 +104,7 @@ const MainContent = () => {
                     selectedCategory === category
                       ? "bg-red-primary text-white hover:bg-red-600 active:bg-red-700"
                       : "bg-white-primary text-black hover:bg-blue-50 active:bg-blue-100"
-                  } p-2 rounded-full px-3 text-lg cursor-pointer shadow-md`}
+                  } p-2 rounded-full px-3 text-lg cursor-pointer shadow-md hover:scale-102 active:scale-98`}
                   onClick={() => setSelectedCategory(category)}
                   key={index}
                 >

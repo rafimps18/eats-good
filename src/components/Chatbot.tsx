@@ -176,7 +176,7 @@ const Chatbot = () => {
               />
               <button
                 onClick={(e) => handleFormSubmit(e)}
-                className="bg-green-primary hover:bg-green-700 active:bg-green-800 p-2 rounded-full flex items-center justify-center cursor-pointer"
+                className="bg-green-primary hover:bg-green-700 hover:scale-102 active:bg-green-800 active:scale-98 p-2 rounded-full flex items-center justify-center cursor-pointer"
               >
                 <Send color="white" className="mt-0.5 mx-auto" />
               </button>
@@ -185,7 +185,7 @@ const Chatbot = () => {
         </div>
         <button
           onClick={() => setChatWindowOpen(!chatWindowOpen)}
-          className="bg-green-primary w-[50px] h-[50px] md:w-[80px] md:h-[80px] rounded-full hover:bg-green-700 active:bg-green-800 cursor-pointer shadow-md"
+          className="bg-green-primary w-[50px] h-[50px] md:w-[80px] md:h-[80px] rounded-full hover:bg-green-700 hover:scale-102 active:bg-green-800 active:scale-98 cursor-pointer shadow-md"
         >
           <div className="flex justify-center items-center md:w-[100%] md:h-[100%]">
             <img
