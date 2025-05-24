@@ -7,6 +7,7 @@ import {
   type FormEvent,
 } from "react";
 import { initialPrompt } from "../constants";
+import { useThemeContext } from "./ThemeContext";
 
 interface ChatMessage {
   hiddenInChat: boolean;
@@ -20,6 +21,7 @@ interface ChatHistory {
 }
 
 const Chatbot = () => {
+  const { theme } = useThemeContext();
   const [chatWindowOpen, setChatWindowOpen] = useState<boolean>(false);
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
     { hiddenInChat: false, role: "model", text: "Hello! How can I help you?" },
@@ -133,7 +135,11 @@ const Chatbot = () => {
             </button>
           </div>
           {/* Chat messages window */}
-          <div className="bg-white h-[70vh] md:h-[60vh] md:w-[50vw] lg:w-[375px] rounded-bl-lg rounded-br-sm shadow-md">
+          <div
+            className={`${
+              theme === "dark" ? "dark" : " "
+            } bg-white dark:bg-zinc-800 h-[70vh] md:h-[60vh] md:w-[50vw] lg:w-[375px] rounded-bl-lg rounded-br-sm shadow-md`}
+          >
             <div
               ref={chatBodyRef}
               className="h-[89%] w-[100%] py-4 pl-4 pr-2 overflow-y-auto overflow-x-hidden scroll border-b-[1px] border-b-gray-400"
@@ -150,7 +156,7 @@ const Chatbot = () => {
                   <div
                     className={`${
                       message.role === "user"
-                        ? "bg-gray-200 text-end ml-4 rounded-br-sm"
+                        ? "bg-gray-200 dark:bg-zinc-700 text-black dark:text-white text-end ml-4 rounded-br-sm"
                         : `${
                             message.text === "Thinking..."
                               ? "animate-pulse"
@@ -164,13 +170,13 @@ const Chatbot = () => {
               ))}
             </div>
             {/* Message input field and send button */}
-            <form className="h-[11%] w-[100%] flex items-center justify-between px-3 gap-2">
+            <form className="h-[11%] w-[100%] flex items-center justify-between px-3 gap-2 bg-green-primary rounded-b-lg">
               <input
                 ref={inputRef}
                 type="text"
                 name="message-input"
                 id="message-input"
-                className="border-[1px] border-gray-400 rounded-full px-4 py-2 w-[100%]"
+                className="text-black dark:text-white bg-white dark:bg-zinc-800 border-[1px] border-gray-400 rounded-full px-4 py-2 w-[100%]"
                 autoComplete="off"
                 maxLength={200}
               />

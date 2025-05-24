@@ -4,6 +4,7 @@ import { ChevronDown, ChevronUp, Search } from "lucide-react";
 import MealCard from "./MealCard";
 import LoadingCard from "./LoadingCard";
 import { categoriesList } from "../constants";
+import { useThemeContext } from "./ThemeContext";
 
 interface Recipe {
   idMeal: string;
@@ -11,34 +12,46 @@ interface Recipe {
   strMealThumb: string;
 }
 
+interface UIState {
+  dropdownOpen: boolean;
+  recipesLoading: boolean;
+}
+
 const MainContent = () => {
+  const { theme } = useThemeContext();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("Beef");
-  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [recipesLoading, setRecipesLoading] = useState<boolean>(false);
+  const [ui, setUI] = useState<UIState>({
+    dropdownOpen: false,
+    recipesLoading: false,
+  });
 
   useEffect(() => {
     let url = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${selectedCategory}`;
-    setRecipesLoading(true);
+    setUI({ ...ui, recipesLoading: true });
     axios
       .get(url)
       .then((res) => {
         setRecipes(res.data?.meals || []);
       })
       .catch((err) => console.log(err))
-      .finally(() => setRecipesLoading(false));
+      .finally(() => setUI({ ...ui, recipesLoading: false }));
   }, [selectedCategory]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  }, [theme]);
+
   const handleDropdownSelect = (selectedVal: string) => {
     if (selectedVal !== selectedCategory) {
       setSelectedCategory(selectedVal);
     }
-    setDropdownOpen(false);
+    setUI({ ...ui, dropdownOpen: false });
   };
 
   const filteredRecipes = useMemo(() => {
@@ -49,11 +62,15 @@ const MainContent = () => {
   }, [recipes, searchQuery]);
 
   return (
-    <div className="bg-gray-200 w-[100%] min-h-[95vh] px-8">
+    <div
+      className={`${
+        theme === "dark" ? "dark " : " "
+      } bg-gray-200 dark:bg-zinc-900 w-[100%] min-h-[95vh] px-8`}
+    >
       <section>
         <div className="flex flex-col justify-center items-center mt-8 mb-6  gap-4">
           {/* Search field */}
-          <div className="relative bg-white rounded-full h-[50px]">
+          <div className="relative text-black dark:text-white bg-white rounded-full h-[50px]">
             <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
               <Search />
             </div>
@@ -63,7 +80,7 @@ const MainContent = () => {
               } recipes...`}
               onChange={(e) => setSearchQuery(e.target.value)}
               type="text"
-              className="w-full rounded-full text-md bg-white h-full focus:outline-none pl-10 pr-4 shadow-md"
+              className="w-full rounded-full text-md  bg-white dark:bg-zinc-900 border-gray-400 border-[1px] h-full focus:outline-none pl-10 pr-4 shadow-md"
             />
           </div>
 
@@ -71,21 +88,21 @@ const MainContent = () => {
           <div className="relative block lg:hidden">
             <button
               className={`${
-                !dropdownOpen ? "rounded-lg" : "rounded-t-lg"
-              } flex flex-row items-center w-[150px] bg-white hover:bg-blue-50 active:bg-blue-100 px-4 py-3 border-none text-md cursor-pointer gap-2 shadow-md`}
-              onClick={() => setDropdownOpen(!dropdownOpen)}
+                !ui.dropdownOpen ? "rounded-lg" : "rounded-t-lg"
+              } flex flex-row items-center w-[150px] bg-white dark:bg-zinc-800 text-black dark:text-white hover:bg-blue-50 dark:hover:bg-zinc-950 active:bg-blue-100 px-4 py-3 border-none text-md cursor-pointer gap-2 shadow-md`}
+              onClick={() => setUI({ ...ui, dropdownOpen: !ui.dropdownOpen })}
             >
-              {dropdownOpen ? <ChevronUp /> : <ChevronDown />}
+              {ui.dropdownOpen ? <ChevronUp /> : <ChevronDown />}
               {selectedCategory}
             </button>
             <div
               className={
-                dropdownOpen ? "absolute right-0 shadow-lg z-40" : "hidden"
+                ui.dropdownOpen ? "absolute right-0 shadow-lg z-40" : "hidden"
               }
             >
               {categoriesList.map((category, index) => (
                 <button
-                  className={`w-[150px] bg-white p-2 hover:bg-blue-50 active:bg-blue-100 cursor-pointer`}
+                  className={`w-[150px] text-black dark:text-white bg-white dark:bg-zinc-800 p-2 hover:bg-blue-50 dark:hover:bg-zinc-950 active:bg-blue-100 dark:active:bg-zinc-950 cursor-pointer`}
                   key={index}
                   onClick={() => handleDropdownSelect(category)}
                 >
@@ -103,8 +120,8 @@ const MainContent = () => {
                   className={`${
                     selectedCategory === category
                       ? "bg-red-primary text-white hover:bg-red-600 active:bg-red-700"
-                      : "bg-white-primary text-black hover:bg-blue-50 active:bg-blue-100"
-                  } p-2 rounded-full px-3 text-lg cursor-pointer shadow-md hover:scale-102 active:scale-98`}
+                      : "bg-white-primary dark:bg-zinc-800 text-black hover:bg-blue-50 hover:dark:bg-zinc-950 active:bg-blue-100 dark:active:bg-zinc-950 dark:text-white "
+                  } p-2 rounded-full px-3 text-lg cursor-pointer shadow-md hover:scale-102 active:scale-96`}
                   onClick={() => setSelectedCategory(category)}
                   key={index}
                 >
@@ -117,7 +134,7 @@ const MainContent = () => {
 
         {/* Meals list */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-2 gap-y-4 mb-8">
-          {recipesLoading
+          {ui.recipesLoading
             ? Array(5)
                 .fill(0)
                 .map((_, i) => <LoadingCard key={i} />)

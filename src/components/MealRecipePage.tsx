@@ -2,6 +2,7 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ChevronLeft } from "lucide-react";
+import { useThemeContext } from "./ThemeContext";
 
 interface Recipe {
   idMeal: string;
@@ -21,6 +22,7 @@ interface ingredientItem {
 }
 
 const MealRecipePage = () => {
+  const { theme } = useThemeContext();
   let { id } = useParams();
   let navigate = useNavigate();
   const [recipe, setRecipe] = useState<Recipe | undefined>(undefined);
@@ -58,8 +60,16 @@ const MealRecipePage = () => {
       .catch((error) => console.log(error));
   }, []);
 
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme]);
+
   return (
-    <div className="flex flex-col w-screen h-auto bg-gray-100">
+    <div className="flex flex-col w-screen h-auto text-black dark:text-white bg-gray-100 dark:bg-zinc-900">
       {/* Back button */}
       <button
         onClick={() => navigate(-1)}

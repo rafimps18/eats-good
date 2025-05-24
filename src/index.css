@@ -9,7 +9,13 @@
     --color-white-primary: #FDFDFD; 
 }
 
-body {
+@custom-variant dark (&:where(.dark, .dark *));
+
+* {
     font-family: "Inter", sans-serif;
+}
+
+body {
     overflow-x: hidden;
 }
+
