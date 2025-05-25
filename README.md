@@ -1,6 +1,6 @@
-# Recipe App
+# Eat's Good
 
-A React-based recipe application that allows users to browse and view detailed recipe information with an integrated chatbot for assistance.
+A recipe viewing website that allows users to browse and view detailed recipe information with an integrated chatbot for personalized assistance.
 
 ## Features
 
