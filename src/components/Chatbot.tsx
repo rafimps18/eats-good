@@ -176,7 +176,7 @@ const Chatbot = () => {
                 type="text"
                 name="message-input"
                 id="message-input"
-                className="text-black dark:text-white bg-white dark:bg-zinc-800 border-[1px] border-gray-400 rounded-full px-4 py-2 w-[100%]"
+                className="text-sm text-black dark:text-white bg-white dark:bg-zinc-800 border-[1px] border-gray-400 rounded-full px-3 py-1 w-[100%]"
                 autoComplete="off"
                 maxLength={200}
               />
