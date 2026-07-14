@@ -114,7 +114,7 @@ const MainContent = () => {
 
           {/* Category selection for large resolutions and up */}
           <div className="hidden lg:flex justify-center w-screen">
-            <div className="flex overflow-x-auto gap-2 px-10 pb-2">
+            <div className="flex overflow-x-auto gap-2 pb-2">
               {categoriesList.map((category, index) => (
                 <button
                   className={`${
