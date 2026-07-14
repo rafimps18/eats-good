@@ -18,7 +18,7 @@ const MealCard: React.FC<MealCardPropTypes> = ({ id, name, imageURL }) => {
       >
         <img
           loading="lazy"
-          className="h-auto mb-2 rounded-lg w-[20rem] md:w-[10rem] lg:w-[20rem]"
+          className="h-auto rounded-t-lg lg:mb-2 md:rounded-l-lg md:rounded-r-none lg:rounded-t-lg lg:rounded-b-none w-[20rem] md:w-[10rem] lg:w-[20rem]"
           src={imageURL}
           alt={name}
         />
