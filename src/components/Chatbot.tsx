@@ -182,7 +182,7 @@ const Chatbot = () => {
               />
               <button
                 onClick={(e) => handleFormSubmit(e)}
-                className="bg-green-primary hover:bg-green-700 hover:scale-102 active:bg-green-800 active:scale-98 p-2 rounded-full flex items-center justify-center cursor-pointer"
+                className="bg-green-primary hover:bg-green-700 hover:scale-102 active:bg-green-800 active:scale-98 p-1 rounded-full flex items-center justify-center cursor-pointer"
               >
                 <Send color="white" className="mt-0.5 mx-auto" />
               </button>
