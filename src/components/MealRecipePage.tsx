@@ -133,7 +133,7 @@ const MealRecipePage = () => {
       {/* Content Section */}
       <section className="pb-8">
         <div className="w-screen flex flex-col justify-center items-center my-4">
-          <h1 className="text-2xl mb-2">Ingredients</h1>
+          <h1 className="text-2xl mb-2 font-bold">Ingredients</h1>
           {/* Ingredients */}
           <ul className="grid grid-cols-1 md:grid-cols-2 list-disc gap-x-8 gap-y-2 mb-8">
             {loading
@@ -152,7 +152,7 @@ const MealRecipePage = () => {
                 ))}
           </ul>
           {/* Instructions */}
-          <h1 className="text-2xl mb-2">Instructions:</h1>
+          <h1 className="text-2xl mb-2 font-bold">Instructions:</h1>
           {loading ? (
             Array(6)
               .fill(0)

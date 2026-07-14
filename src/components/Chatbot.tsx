@@ -176,13 +176,13 @@ const Chatbot = () => {
                 type="text"
                 name="message-input"
                 id="message-input"
-                className="text-black dark:text-white bg-white dark:bg-zinc-800 border-[1px] border-gray-400 rounded-full px-4 py-2 w-[100%]"
+                className="text-sm text-black dark:text-white bg-white dark:bg-zinc-800 border-[1px] border-gray-400 rounded-full px-3 py-1 w-[100%]"
                 autoComplete="off"
                 maxLength={200}
               />
               <button
                 onClick={(e) => handleFormSubmit(e)}
-                className="bg-green-primary hover:bg-green-700 hover:scale-102 active:bg-green-800 active:scale-98 p-2 rounded-full flex items-center justify-center cursor-pointer"
+                className="bg-green-primary hover:bg-green-700 hover:scale-102 active:bg-green-800 active:scale-98 p-1 rounded-full flex items-center justify-center cursor-pointer"
               >
                 <Send color="white" className="mt-0.5 mx-auto" />
               </button>
