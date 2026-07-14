@@ -133,7 +133,7 @@ const MainContent = () => {
         </div>
 
         {/* Meals list */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-2 gap-y-4 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-x-2 gap-y-4 mb-8">
           {ui.recipesLoading
             ? Array(5)
                 .fill(0)
