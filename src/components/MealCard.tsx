@@ -22,7 +22,7 @@ const MealCard: React.FC<MealCardPropTypes> = ({ id, name, imageURL }) => {
           src={imageURL}
           alt={name}
         />
-        <h1 className="text-xl md:text-lg text-wrap font-bold truncate">
+        <h1 className="text-sm md:text-lg lg:text-xl m-2 lg:m-0 font-bold line-clamp-1 text-center px-4 w-full">
           {name}
         </h1>
       </div>
