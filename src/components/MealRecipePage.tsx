@@ -56,9 +56,9 @@ const MealRecipePage = () => {
 
         setIngredients(ingredientsAndAmounts);
       })
-      .finally(() => setLoading(false))
-      .catch((error) => console.log(error));
-  }, []);
+      .catch((error) => console.log(error))
+      .finally(() => setLoading(false));
+  }, [id]);
 
   useEffect(() => {
     if (theme === "dark") {
