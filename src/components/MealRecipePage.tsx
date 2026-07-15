@@ -54,7 +54,7 @@ const MealRecipePage = () => {
           if (name && name !== "") {
             ingredientsAndAmounts.push({
               name: name.trim(),
-              amount: amount.trim() || "",
+              amount: amount ? amount.trim() : "",
             });
           }
         }
