@@ -173,7 +173,7 @@ const MealRecipePage = () => {
             </h2>
           )}
         </div>
-        {recipe?.strSource !== "" ? (
+        {recipe?.strSource?.trim() ? (
           <div className="w-[100vw] flex flex-col md:flex-row justify-center items-center my-4 gap-1 px-8 text-wrap">
             <p className="font-bold">Source: </p>
             <a
