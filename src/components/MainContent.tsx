@@ -1,10 +1,10 @@
 import { useState, useEffect, useMemo } from "react";
+import { useThemeContext } from "./ThemeContext";
 import axios from "axios";
 import { ChevronDown, ChevronUp, Search } from "lucide-react";
 import MealCard from "./MealCard";
 import LoadingCard from "./LoadingCard";
 import { categoriesList } from "../constants";
-import { useThemeContext } from "./ThemeContext";
 
 interface Recipe {
   idMeal: string;
