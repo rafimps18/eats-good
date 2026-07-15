@@ -23,17 +23,17 @@ interface ingredientItem {
 
 const MealRecipePage = () => {
   const { theme } = useThemeContext();
-  let { id } = useParams();
-  let navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [recipe, setRecipe] = useState<Recipe | undefined>(undefined);
-  let [ingredients, setIngredients] = useState<ingredientItem[]>([]);
+  const [ingredients, setIngredients] = useState<ingredientItem[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
     setLoading(true);
 
-    let url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
+    const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
 
     axios
       .get(url)
