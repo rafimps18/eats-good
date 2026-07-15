@@ -1,8 +1,10 @@
-import { Moon, Sun } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useThemeContext } from "./ThemeContext";
+import { Moon, Sun } from "lucide-react";
+
 const Navbar = () => {
   const { theme, toggleTheme } = useThemeContext();
+
   return (
     <div className="w-screen h-[8vh] bg-green-primary px-4 md:px-8 flex justify-between items-center">
       <Link to="/" className="flex gap-2 items-center cursor-pointer">
