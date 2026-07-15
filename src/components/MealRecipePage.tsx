@@ -1,8 +1,8 @@
-import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { ChevronLeft } from "lucide-react";
+import { useParams, useNavigate } from "react-router-dom";
 import { useThemeContext } from "./ThemeContext";
+import axios from "axios";
+import { ChevronLeft } from "lucide-react";
 
 interface Recipe {
   idMeal: string;
@@ -23,22 +23,27 @@ interface ingredientItem {
 
 const MealRecipePage = () => {
   const { theme } = useThemeContext();
-  let { id } = useParams();
-  let navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [recipe, setRecipe] = useState<Recipe | undefined>(undefined);
-  let [ingredients, setIngredients] = useState<ingredientItem[]>([]);
+  const [ingredients, setIngredients] = useState<ingredientItem[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
     setLoading(true);
 
-    let url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
+    const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
 
     axios
       .get(url)
       .then((res) => {
-        let data = res.data.meals[0];
+        const data = res.data.meals?.[0];
+        if (!data) {
+          setRecipe(undefined);
+          setIngredients([]);
+          return;
+        }
         setRecipe(data);
 
         const ingredientsAndAmounts: ingredientItem[] = [];
@@ -46,19 +51,19 @@ const MealRecipePage = () => {
         for (let i = 1; i <= 20; i++) {
           const name = data[`strIngredient${i}`];
           const amount = data[`strMeasure${i}`];
-          if (name && name !== "") {
+          if (name?.trim()) {
             ingredientsAndAmounts.push({
               name: name.trim(),
-              amount: amount.trim() || "",
+              amount: amount ? amount.trim() : "",
             });
           }
         }
 
         setIngredients(ingredientsAndAmounts);
       })
-      .finally(() => setLoading(false))
-      .catch((error) => console.log(error));
-  }, []);
+      .catch((error) => console.log(error))
+      .finally(() => setLoading(false));
+  }, [id]);
 
   useEffect(() => {
     if (theme === "dark") {
@@ -168,7 +173,7 @@ const MealRecipePage = () => {
             </h2>
           )}
         </div>
-        {recipe?.strSource !== "" ? (
+        {recipe?.strSource?.trim() ? (
           <div className="w-[100vw] flex flex-col md:flex-row justify-center items-center my-4 gap-1 px-8 text-wrap">
             <p className="font-bold">Source: </p>
             <a
