@@ -1,8 +1,8 @@
-import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { ChevronLeft } from "lucide-react";
+import { useParams, useNavigate } from "react-router-dom";
 import { useThemeContext } from "./ThemeContext";
+import axios from "axios";
+import { ChevronLeft } from "lucide-react";
 
 interface Recipe {
   idMeal: string;
