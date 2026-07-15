@@ -51,7 +51,7 @@ const MealRecipePage = () => {
         for (let i = 1; i <= 20; i++) {
           const name = data[`strIngredient${i}`];
           const amount = data[`strMeasure${i}`];
-          if (name && name !== "") {
+          if (name?.trim()) {
             ingredientsAndAmounts.push({
               name: name.trim(),
               amount: amount ? amount.trim() : "",
