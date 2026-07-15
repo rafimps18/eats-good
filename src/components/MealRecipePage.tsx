@@ -38,7 +38,12 @@ const MealRecipePage = () => {
     axios
       .get(url)
       .then((res) => {
-        let data = res.data.meals[0];
+        const data = res.data.meals?.[0];
+        if (!data) {
+          setRecipe(undefined);
+          setIngredients([]);
+          return;
+        }
         setRecipe(data);
 
         const ingredientsAndAmounts: ingredientItem[] = [];
