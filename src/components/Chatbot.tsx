@@ -1,4 +1,3 @@
-import { ChevronDown, Send } from "lucide-react";
 import {
   useEffect,
   useRef,
@@ -6,8 +5,9 @@ import {
   useCallback,
   type FormEvent,
 } from "react";
-import { initialPrompt } from "../constants";
 import { useThemeContext } from "./ThemeContext";
+import { ChevronDown, Send } from "lucide-react";
+import { initialPrompt } from "../constants";
 
 interface ChatMessage {
   hiddenInChat: boolean;
